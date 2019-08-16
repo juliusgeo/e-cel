@@ -140,6 +140,7 @@ int main(int argc, char** argv){
 		
 	}
 	initscr();
+	noecho();
 	keypad(stdscr, TRUE);
 	int c;
 	typedef enum state {INPUT=0, SELECT=1}state;
@@ -165,13 +166,22 @@ int main(int argc, char** argv){
 					case KEY_RIGHT:
 						move_horz(false);
 						break;
-					case KEY_ENTER:
+					case 10:
 						s = INPUT;
 						break;
 					default:
 						break;
 				}
 			}
+		}
+		else if(s == INPUT){
+			echo();
+			char* input_buf = malloc(sizeof(char)*(w.ws_col-1));
+			getstr(input_buf);
+			cells[sel_y][sel_x]->val = atof(input_buf);
+			free(input_buf);	
+			noecho();
+			s = SELECT;
 		}
 		//printf ("lines %d\n", w.ws_row);
 		//printf ("columns %d\n", w.ws_col);
