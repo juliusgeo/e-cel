@@ -2,6 +2,15 @@
 %{
 #define YYSTYPE double
 #include <math.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <string.h>
+extern int yylex();
+extern int yyparse();
+extern FILE *yyin;
+
+void yyerror(const char *s);
+extern void scan_string(const char* str);
 %}
 
 /* BISON Declarations */
@@ -37,16 +46,14 @@ exp:      NUM                { $$ = $1;         }
    character read if not a number.  Skips all blanks
    and tabs, returns 0 for EOF. */
 
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
 
-yyerror (s)  /* Called by yyparse on error */
+
+void yyerror (s)  /* Called by yyparse on error */
      char *s;
 {
   printf ("%s\n", s);
 }
-yylex ()
+int yylex ()
 {
   int c;
 
@@ -67,13 +74,9 @@ yylex ()
   return c;                                
 }
 
-void scan_string(const char* str)
-{
-    yy_switch_to_buffer(yy_scan_string(str));
-}
-
 int main ()
 {   
+    scan_string("1+2");
     yyparse();
 }
 

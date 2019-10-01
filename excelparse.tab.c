@@ -82,6 +82,15 @@
 
 #define YYSTYPE double
 #include <math.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <string.h>
+extern int yylex();
+extern int yyparse();
+extern FILE *yyin;
+
+void yyerror(const char *s);
+extern void scan_string(const char* str);
 
 
 /* Enabling traces.  */
@@ -115,7 +124,7 @@ typedef int YYSTYPE;
 
 
 /* Line 216 of yacc.c.  */
-#line 119 "excelparse.tab.c"
+#line 128 "excelparse.tab.c"
 
 #ifdef short
 # undef short
@@ -401,8 +410,8 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    16,    16,    17,    20,    21,    24,    25,    26,    27,
-      28,    29,    30,    31
+       0,    25,    25,    26,    29,    30,    33,    34,    35,    36,
+      37,    38,    39,    40
 };
 #endif
 
@@ -1314,53 +1323,53 @@ yyreduce:
   switch (yyn)
     {
         case 5:
-#line 21 "excelparse.y"
+#line 30 "excelparse.y"
     { printf ("\t%.10g\n", (yyvsp[(1) - (2)])); ;}
     break;
 
   case 6:
-#line 24 "excelparse.y"
+#line 33 "excelparse.y"
     { (yyval) = (yyvsp[(1) - (1)]);         ;}
     break;
 
   case 7:
-#line 25 "excelparse.y"
+#line 34 "excelparse.y"
     { (yyval) = (yyvsp[(1) - (3)]) + (yyvsp[(3) - (3)]);    ;}
     break;
 
   case 8:
-#line 26 "excelparse.y"
+#line 35 "excelparse.y"
     { (yyval) = (yyvsp[(1) - (3)]) - (yyvsp[(3) - (3)]);    ;}
     break;
 
   case 9:
-#line 27 "excelparse.y"
+#line 36 "excelparse.y"
     { (yyval) = (yyvsp[(1) - (3)]) * (yyvsp[(3) - (3)]);    ;}
     break;
 
   case 10:
-#line 28 "excelparse.y"
+#line 37 "excelparse.y"
     { (yyval) = (yyvsp[(1) - (3)]) / (yyvsp[(3) - (3)]);    ;}
     break;
 
   case 11:
-#line 29 "excelparse.y"
+#line 38 "excelparse.y"
     { (yyval) = -(yyvsp[(2) - (2)]);        ;}
     break;
 
   case 12:
-#line 30 "excelparse.y"
+#line 39 "excelparse.y"
     { (yyval) = pow ((yyvsp[(1) - (3)]), (yyvsp[(3) - (3)])); ;}
     break;
 
   case 13:
-#line 31 "excelparse.y"
+#line 40 "excelparse.y"
     { (yyval) = (yyvsp[(2) - (3)]);         ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1364 "excelparse.tab.c"
+#line 1373 "excelparse.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1574,7 +1583,7 @@ yyreturn:
 }
 
 
-#line 33 "excelparse.y"
+#line 42 "excelparse.y"
 
 
 /* Lexical analyzer returns a double floating point 
@@ -1582,10 +1591,14 @@ yyreturn:
    character read if not a number.  Skips all blanks
    and tabs, returns 0 for EOF. */
 
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
-yylex ()
+
+
+void yyerror (s)  /* Called by yyparse on error */
+     char *s;
+{
+  printf ("%s\n", s);
+}
+int yylex ()
 {
   int c;
 
@@ -1606,20 +1619,10 @@ yylex ()
   return c;                                
 }
 
-typedef struct yy_buffer_state * YY_BUFFER_STATE;
-extern YY_BUFFER_STATE yy_scan_string(const char * str);
-extern YY_BUFFER_STATE yy_scan_buffer(char *, size_t);
-extern void yy_delete_buffer(YY_BUFFER_STATE buffer);
-extern void yy_switch_to_buffer(YY_BUFFER_STATE buffer);
-main ()
-
-{
-    yy_switch_to_buffer(yy_scan_string("4 + 4.5 - (34/(8*3+-3))"));
-    yylex();
+int main ()
+{   
+    scan_string("1+2");
+    yyparse();
 }
 
-yyerror (s)  /* Called by yyparse on error */
-     char *s;
-{
-  printf ("%s\n", s);
-}
+
